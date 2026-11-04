@@ -1,33 +1,103 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NASA Space Explorer</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Space Explorer</title>
+    <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
-  <div class="container">
+
     <header class="site-header">
-      <img src="img/nasa-worm-logo.png" alt="NASA Logo" class="logo" />
-      <h1>Space Explorer</h1>
+        <nav class="navbar">
+            <img class="nasa-logo" src="img/NASA-Logo-Large.png" alt="NASA logo">
+            <span class="brand">SPACE EXPLORER</span>
+        </nav>
     </header>
 
-    <div class="filters">
-      <input type="date" id="startDate" />
-      <input type="date" id="endDate" />
-      <button>Get Space Images</button>
+    <section class="hero">
+        <div class="planet" aria-hidden="true"></div>
+        <div class="hero-content">
+            <p class="eyebrow">NASA ASTRONOMY PICTURE OF THE DAY</p>
+            <h1>Explore the Universe</h1>
+            <p>
+                Discover amazing pictures and videos from space.
+                Explore planets, galaxies, stars, and other wonders
+                of our universe.
+            </p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="intro-section">
+            <h2>Welcome, Space Explorer!</h2>
+            <p>
+                NASA shares a new astronomy picture or video every day.
+                Choose a date range to explore nine consecutive days of
+                incredible space discoveries.
+            </p>
+        </section>
+
+        <section class="date-section">
+            <h2>Choose Your Dates</h2>
+            <p>Select a starting date. The ending date will automatically be eight days later.</p>
+
+            <div class="date-controls">
+                <div class="date-field">
+                    <label for="startDate">Start Date</label>
+                    <input type="date" id="startDate">
+                </div>
+
+                <div class="date-field">
+                    <label for="endDate">End Date</label>
+                    <input type="date" id="endDate">
+                </div>
+
+                <button id="loadImages" type="button">Explore Space</button>
+            </div>
+
+            <p id="status" role="status" aria-live="polite">
+                Loading NASA pictures...
+            </p>
+        </section>
+
+        <section class="gallery-section">
+            <h2>Space Gallery</h2>
+            <p>Click any card to see its picture, date, and description.</p>
+            <div id="galleryGrid" class="gallery"></div>
+        </section>
+
+        <section class="fact-section">
+            <h2>Did You Know?</h2>
+            <div class="fact-box">
+                <p id="spaceFact"></p>
+                <button id="newFact" type="button">Show Another Fact</button>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal" id="imageModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+            <button class="close-button" id="closeModal" type="button" aria-label="Close">×</button>
+
+            <div id="modalMedia"></div>
+            <p id="modalDate" class="modal-date"></p>
+            <h2 id="modalTitle"></h2>
+            <p id="modalExplanation"></p>
+
+            <a id="nasaLink" href="#" target="_blank" rel="noopener noreferrer">
+                View on NASA
+            </a>
+        </div>
     </div>
 
-    <div id="gallery" class="gallery">
-      <div class="placeholder">
-        <div class="placeholder-icon">🔭</div>
-        <p>Select a date range and click "Get Space Images" to explore the cosmos!</p>
-      </div>
-    </div>
-  </div>
+    <footer>
+        <p>NASA Space Explorer | Powered by NASA's Astronomy Picture of the Day API</p>
+    </footer>
 
-  <script src="js/dateRange.js"></script>
-  <script src="js/script.js"></script>
+    <script src="js/dateRange.js?v=2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/script.js?v=2"></script>
 </body>
 </html>

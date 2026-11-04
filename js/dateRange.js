@@ -1,30 +1,48 @@
 
-// NOTE: You do not need to edit this file.
+/* DATE RANGE SETTINGS */
 
-// NASA's APOD API only has images from June 16, 1995 onwards
-const earliestDate = '1995-06-16';
+const earliestDate = "1995-06-16";
 
-// Get today's date in YYYY-MM-DD format (required by date inputs)
-const today = new Date().toISOString().split('T')[0];
+function formatInputDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+function shiftDate(dateString, days) {
+    const date = new Date(dateString + "T12:00:00");
+    date.setDate(date.getDate() + days);
+
+    return formatInputDate(date);
+}
 
 function setupDateInputs(startInput, endInput) {
-  // Restrict date selection range from NASA's first image to today
-  startInput.min = earliestDate;
-  startInput.max = today;
-  endInput.min = earliestDate;
-  endInput.max = today;
+    const today = formatInputDate(new Date());
 
-  // Default: Show the most recent 9 days of space images
-  const lastWeek = new Date();
-  lastWeek.setDate(lastWeek.getDate() - 8); // minus 8 because it includes today
-  startInput.value = lastWeek.toISOString().split('T')[0];
-  endInput.value = today;
+    // The start date must allow eight more days after it.
+    startInput.min = earliestDate;
+    startInput.max = shiftDate(today, -8);
 
-  // Automatically adjust end date to show exactly 9 days of images
-  startInput.addEventListener('change', () => {
-    const startDate = new Date(startInput.value);
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 8);
-    endInput.value = endDate > new Date(today) ? today : endDate.toISOString().split('T')[0];
-  });
+    // The end date must be at least eight days after the earliest date.
+    endInput.min = shiftDate(earliestDate, 8);
+    endInput.max = today;
+
+    // Start with the most recent nine available days.
+    startInput.value = shiftDate(today, -8);
+    endInput.value = today;
+
+    // Keep the dates exactly nine days apart.
+    startInput.addEventListener("change", () => {
+        if (!startInput.value) return;
+
+        endInput.value = shiftDate(startInput.value, 8);
+    });
+
+    endInput.addEventListener("change", () => {
+        if (!endInput.value) return;
+
+        startInput.value = shiftDate(endInput.value, -8);
+    });
 }
