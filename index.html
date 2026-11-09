@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NASA Space Explorer</title>
-    <link rel="stylesheet" href="style.css?v=2">
+    <meta name="theme-color" content="#0b3d91">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
 
@@ -13,8 +15,14 @@
         <nav class="navbar">
             <img class="nasa-logo" src="img/NASA-Logo-Large.png" alt="NASA logo">
             <span class="brand">SPACE EXPLORER</span>
+            <button id="installButton" class="install-button" type="button" hidden>
+                Install App
+            </button>
         </nav>
     </header>
+    <p id="offlineIndicator" class="offline-indicator" role="status" aria-live="polite" hidden>
+        You are offline. Previously loaded NASA pictures may be available.
+    </p>
 
     <section class="hero">
         <div class="planet" aria-hidden="true"></div>
@@ -75,6 +83,13 @@
                 <button id="newFact" type="button">Show Another Fact</button>
             </div>
         </section>
+
+        <section class="notification-section">
+            <h2>Space Updates</h2>
+            <p>Allow notifications to see a sample NASA Space Explorer alert.</p>
+            <button id="notificationButton" type="button">Enable Notifications</button>
+            <p id="notificationStatus" role="status" aria-live="polite"></p>
+        </section>
     </main>
 
     <div class="modal" id="imageModal" aria-hidden="true">
@@ -98,6 +113,14 @@
 
     <script src="js/dateRange.js?v=2"></script>
     <script src="js/config.js"></script>
-    <script src="js/script.js?v=2"></script>
+    <script src="js/script.js?v=3"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("./service-worker.js")
+                .catch(error => {
+                    console.error("Service worker registration failed:", error);
+                });
+        }
+    </script>
 </body>
 </html>

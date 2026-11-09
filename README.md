@@ -9,6 +9,10 @@ You'll get to use your skills to build something that's actually connected to re
 - The provided files include a NASA logo, date inputs, a button, a placeholder for your gallery, and basic layout and styling to help you get started.
 - It also includes built-in logic (in `dateRange.js`) to handle the valid APOD date range—from June 16, 1995 to today. No need to modify it.
 - All your custom JavaScript should go in `script.js`. That's where you'll write the code that fetches data and displays your gallery.
+- The app includes a web app manifest (`manifest.json`) and 192px and 512px icons for standalone installation.
+- The service worker caches the app shell and uses a network-first strategy for NASA API responses, so previously loaded date ranges can work offline. An indicator appears when the app loses its connection. Service workers require HTTPS or localhost.
+- When the browser supports installation, an **Install App** button appears and opens the native install prompt when clicked.
+- The **Enable Notifications** button requests notification permission and displays a demo alert if permission is granted. Notifications require browser support and a secure context.
 
 ## NASA API Key
 The app loads the NASA API key from `js/config.js`, which is excluded from Git. Keep your key there rather than adding it to a tracked file. The key is still visible to anyone using a browser-based app, so use a server-side proxy if you deploy this publicly.

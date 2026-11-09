@@ -45,6 +45,7 @@ input {
 
 .navbar {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 14px;
 }
@@ -60,6 +61,35 @@ input {
     font-size: 18px;
     font-weight: bold;
     letter-spacing: 2px;
+}
+
+.install-button {
+    margin-left: auto;
+    padding: 10px 16px;
+    border-radius: 3px;
+    background: var(--cloud-white);
+    color: var(--nasa-blue);
+}
+
+.install-button:hover {
+    background: var(--light-blue);
+}
+
+.install-button[hidden] {
+    display: none;
+}
+
+.offline-indicator {
+    margin: 0;
+    padding: 10px 5%;
+    background: #fff3cd;
+    color: #664d03;
+    text-align: center;
+    font-weight: bold;
+}
+
+.offline-indicator[hidden] {
+    display: none;
 }
 
 /* HERO */
@@ -266,6 +296,24 @@ a:focus-visible {
 
 .gallery-section > p {
     color: #f1f5f9;
+}
+
+.notification-section {
+    text-align: center;
+    background: var(--light-blue);
+}
+
+.notification-section h2 {
+    margin-bottom: 12px;
+}
+
+.notification-section > p {
+    color: var(--muted-blue);
+}
+
+.notification-section #notificationStatus {
+    min-height: 22px;
+    margin-bottom: 0;
 }
 
 .gallery-card {

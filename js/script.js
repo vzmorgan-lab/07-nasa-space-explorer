@@ -11,6 +11,10 @@ const endInput = document.getElementById("endDate");
 const loadButton = document.getElementById("loadImages");
 const gallery = document.getElementById("galleryGrid");
 const statusText = document.getElementById("status");
+const offlineIndicator = document.getElementById("offlineIndicator");
+const installButton = document.getElementById("installButton");
+const notificationButton = document.getElementById("notificationButton");
+const notificationStatus = document.getElementById("notificationStatus");
 
 const modal = document.getElementById("imageModal");
 const modalMedia = document.getElementById("modalMedia");
@@ -18,6 +22,101 @@ const modalDate = document.getElementById("modalDate");
 const modalTitle = document.getElementById("modalTitle");
 const modalExplanation = document.getElementById("modalExplanation");
 const nasaLink = document.getElementById("nasaLink");
+const notificationsSupported =
+    "Notification" in window && window.isSecureContext;
+
+let deferredInstallPrompt;
+
+window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    deferredInstallPrompt = event;
+    installButton.hidden = false;
+});
+
+installButton.addEventListener("click", async () => {
+    if (!deferredInstallPrompt) {
+        return;
+    }
+
+    try {
+        await deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installButton.hidden = true;
+    } catch (error) {
+        console.error("App installation prompt failed:", error);
+    }
+});
+
+window.addEventListener("appinstalled", () => {
+    deferredInstallPrompt = null;
+    installButton.hidden = true;
+});
+
+if (!notificationsSupported) {
+    notificationButton.disabled = true;
+    notificationStatus.textContent =
+        "Notifications require a supported browser and a secure connection.";
+}
+
+notificationButton.addEventListener("click", async () => {
+    if (!notificationsSupported) {
+        notificationButton.disabled = true;
+        notificationStatus.textContent =
+            "Notifications require a supported browser and a secure connection.";
+        return;
+    }
+
+    notificationButton.disabled = true;
+    notificationStatus.textContent = "Requesting notification permission...";
+
+    try {
+        const permission = await Notification.requestPermission();
+
+        if (permission === "granted") {
+            const title = "NASA Space Explorer";
+            const options = {
+                body: "Thanks for enabling notifications! Keep exploring the universe.",
+                icon: "img/app-icon-192.png"
+            };
+
+            if (
+                "serviceWorker" in navigator &&
+                typeof ServiceWorkerRegistration !== "undefined" &&
+                "showNotification" in ServiceWorkerRegistration.prototype
+            ) {
+                const registration = await navigator.serviceWorker.ready;
+                await registration.showNotification(title, options);
+            } else {
+                new Notification(title, options);
+            }
+
+            notificationButton.textContent = "Show Demo Notification";
+            notificationStatus.textContent =
+                "Permission granted. A demo notification was sent.";
+        } else if (permission === "denied") {
+            notificationStatus.textContent =
+                "Notifications are blocked. You can change this in your browser settings.";
+        } else {
+            notificationStatus.textContent =
+                "Notification permission was not granted.";
+        }
+    } catch (error) {
+        console.error("Notification request failed:", error);
+        notificationStatus.textContent =
+            "Could not show a notification. Please try again.";
+    } finally {
+        notificationButton.disabled = Notification.permission === "denied";
+    }
+});
+
+function updateOfflineIndicator() {
+    offlineIndicator.hidden = navigator.onLine;
+}
+
+window.addEventListener("online", updateOfflineIndicator);
+window.addEventListener("offline", updateOfflineIndicator);
+updateOfflineIndicator();
 
 // Space facts for the fact section
 const spaceFacts = [
